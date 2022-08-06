@@ -121,26 +121,27 @@ app.get("/text/sentiment", (req,res) => {
     let textToAnalyze = req.query.text
     const analyzeParams = 
     {
-        "url": textToAnalyze,
-        "features":{
+        "text": textToAnalyze,
+        "features": {
             "keywords": {
                 "sentiment": true,
                 "limit": 1
             }
         }
     }
+
     const naturalLanguageUnderstanding = getNLUInstance();
 
     naturalLanguageUnderstanding.analyze(analyzeParams)
-    .then(analysisResults =>{
-        return res.sent(analysisResults.result.keywords[0].sentiment,null,2);
+    .then(analysisResults => {
+        //Retrieve the sentiment and return it as a formatted string
+
+        return res.send(analysisResults.result.keywords[0].sentiment,null,2);
     })
     .catch(err => {
         return res.send("Could not do desired operation "+err);
     });
 });
-
 let server = app.listen(8080, () => {
     console.log('Listening', server.address().port)
 })
-
